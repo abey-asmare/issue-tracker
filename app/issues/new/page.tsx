@@ -2,7 +2,7 @@
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { createIssueSchema } from "@/app/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Callout, TextField } from "@radix-ui/themes";
+import { Button, Callout, Spinner, TextField } from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
@@ -19,7 +19,7 @@ function NewIssuePage() {
     register,
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isLoading },
   } = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema),
   });
@@ -57,7 +57,7 @@ function NewIssuePage() {
           render={({ field }) => <SimpleMDE {...field} />}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        <Button>Submit new Issue</Button>
+        <Button disabled={isLoading}>Submit new Issue {isLoading && <Spinner />}</Button>
       </form>
     </div>
   );
