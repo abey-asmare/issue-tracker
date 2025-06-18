@@ -19,12 +19,23 @@ function NewIssuePage() {
     register,
     control,
     handleSubmit,
-    formState: { errors, isLoading },
+    formState: { errors },
   } = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema),
   });
+  const onSubmit = async (data) => {
+    try {
+      setSubmitting(true);
+      await axios.post("/api/issues", data);
+      route.push("/issues");
+    } catch {
+      setSubmitting(false);
+      setError("unexpected error occured");
+    }
+  };
   const route = useRouter();
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   return (
     <div className="max-w-xl space-y-3">
       {error && (
@@ -35,17 +46,7 @@ function NewIssuePage() {
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
-      <form
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            await axios.post("/api/issues", data);
-            route.push("/issues");
-          } catch {
-            setError("unexpected error occured");
-          }
-        })}
-        className="max-w-xl space-y-3"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl space-y-3">
         <TextField.Root
           placeholder="create a new issue"
           {...register("title")}
@@ -57,7 +58,9 @@ function NewIssuePage() {
           render={({ field }) => <SimpleMDE {...field} />}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        <Button disabled={isLoading}>Submit new Issue {isLoading && <Spinner />}</Button>
+        <Button disabled={submitting}>
+          Submit new Issue {submitting && <Spinner />}
+        </Button>
       </form>
     </div>
   );
