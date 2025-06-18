@@ -1,7 +1,11 @@
+"use client";
+import clsx from "clsx";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AiFillBug } from "react-icons/ai";
 
 function Nav() {
+  const currentPath = usePathname();
   const links = [
     { label: "Dashboard", href: "/" },
     { label: "Issues", href: "/issues" },
@@ -15,7 +19,10 @@ function Nav() {
         {links.map((link) => (
           <li key={link.href}>
             <Link
-              className="text-zinc-500 hover:text-zinc-800 transition-colors"
+              className={clsx(" hover:text-zinc-800 transition-colors", {
+                "text-zinc-900": currentPath === link.href,
+                "text-zinc-500": currentPath !== link.href,
+              })}
               href={link.href}
             >
               {link.label}
