@@ -1,17 +1,12 @@
 import { prisma } from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import z from "zod";
-
-const createIssueSchema = z.object({
-  title: z.string().min(1).max(255),
-  description: z.string().min(1),
-});
+import { createIssueSchema } from "./validations";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const validate = createIssueSchema.safeParse(body);
   if (!validate.success)
-    return NextResponse.json(validate.error.errors, { status: 400 });
+    return NextResponse.json(validate.error.format(), { status: 400 });
 
   const newIssue = await prisma.issue.create({
     data: {
@@ -20,6 +15,5 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  return NextResponse.json(newIssue, {status: 201})
-  
+  return NextResponse.json(newIssue, { status: 201 });
 }
