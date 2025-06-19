@@ -23,7 +23,7 @@ function NewIssuePage() {
   } = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema),
   });
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: IssueForm) => {
     try {
       setSubmitting(true);
       await axios.post("/api/issues", data);
