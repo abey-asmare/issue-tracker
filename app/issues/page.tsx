@@ -2,6 +2,7 @@ import { prisma } from "@/prisma/client";
 import { Button, Table } from "@radix-ui/themes";
 import clsx from "clsx";
 import Link from "next/link";
+import IssueBadge from "../components/IssueBadge";
 
 async function IssuePage() {
   const issues = await prisma.issue.findMany();
@@ -37,10 +38,12 @@ async function IssuePage() {
               <Table.RowHeaderCell>
                 {issue.title}
 
-                <div className="text-sm md:hidden">{issue.status}</div>
+                <div className="text-sm md:hidden">
+                  <IssueBadge status={issue.status} />
+                </div>
               </Table.RowHeaderCell>
               <Table.Cell className="hidden md:table-cell">
-                {issue.status}
+                <IssueBadge status={issue.status} />
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
                 {issue.createdAt.toDateString()}
