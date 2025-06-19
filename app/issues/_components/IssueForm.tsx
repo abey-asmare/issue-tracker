@@ -31,8 +31,11 @@ function IssueForm({ issue }: { issue?: Issue }) {
   const onSubmit = async (data: IssueFormData) => {
     try {
       setSubmitting(true);
-      await axios.post("/api/issues", data);
+      if (issue) await axios.patch(`/api/issues/${issue.id}`, data);
+      else await axios.post("/api/issues", data);
+
       route.push("/issues");
+      route.refresh();
     } catch {
       setSubmitting(false);
       setError("unexpected error occured");
@@ -43,7 +46,7 @@ function IssueForm({ issue }: { issue?: Issue }) {
   const [submitting, setSubmitting] = useState(false);
   return (
     <div className="max-w-xl space-y-3">
-      {error && ( 
+      {error && (
         <Callout.Root color="red">
           <Callout.Icon>
             <BiInfoCircle />
@@ -66,7 +69,8 @@ function IssueForm({ issue }: { issue?: Issue }) {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
         <Button disabled={submitting}>
-          Submit new Issue {submitting && <Spinner />}
+          {issue ? "update Issue " : "  Submit new Issue"}
+          {submitting && <Spinner />}
         </Button>
       </form>
     </div>
