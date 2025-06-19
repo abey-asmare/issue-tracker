@@ -1,7 +1,6 @@
 import { Skeleton, Table } from "@radix-ui/themes";
 import clsx from "clsx";
 import IssueAction from "./components/IssueAction";
-import delay from "delay";
 
 async function LoadingIssues() {
   const headings = [
@@ -10,7 +9,6 @@ async function LoadingIssues() {
     { label: "CreatedAt", classname: "hidden md:table-cell" },
   ];
 
-  await delay(3000);
   const issues = Array.from({ length: 3 });
   return (
     <div>
