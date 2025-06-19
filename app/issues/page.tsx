@@ -1,7 +1,7 @@
 import { prisma } from "@/prisma/client";
 import { Table } from "@radix-ui/themes";
 import clsx from "clsx";
-import IssueAction from "./components/IssueAction";
+import IssueAction from "./_components/IssueAction";
 import { Link, IssueBadge } from "@/app/components";
 
 async function IssuePage() {

@@ -1,6 +1,6 @@
 import { Skeleton, Table } from "@radix-ui/themes";
 import clsx from "clsx";
-import IssueAction from "./components/IssueAction";
+import IssueAction from "./_components/IssueAction";
 
 async function LoadingIssues() {
   const headings = [
