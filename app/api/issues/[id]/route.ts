@@ -29,3 +29,19 @@ export async function PATCH(request: NextRequest, { params }: Props) {
   });
   return NextResponse.json(updatedIssue);
 }
+
+export async function DELETE(request: NextRequest, { params }: Props) {
+  const url = await params;
+  const validateURL = urlSchema.safeParse(url);
+  if (!validateURL.success)
+    return NextResponse.json({ error: "Issue Not found" }, { status: 404 });
+
+  const issue = await prisma.issue.findUnique({
+    where: { id: parseInt(url.id) },
+  });
+  if (!issue)
+    return NextResponse.json({ error: "Issue Not found" }, { status: 404 });
+
+  await prisma.issue.delete({ where: { id: issue.id } });
+  return NextResponse.json({});
+}

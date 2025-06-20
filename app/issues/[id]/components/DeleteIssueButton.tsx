@@ -1,5 +1,5 @@
 import { TrashIcon } from "@radix-ui/react-icons";
-import { Button, AlertDialog, Flex } from "@radix-ui/themes";
+import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 
 function DeleteIssueButton({ issueId }: { issueId: number }) {
   return (
