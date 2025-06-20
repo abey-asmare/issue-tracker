@@ -4,7 +4,7 @@ import "@radix-ui/themes/styles.css";
 
 import "./globals.css";
 import Nav from "./Nav";
-import { Theme } from "@radix-ui/themes";
+import { Container, Theme } from "@radix-ui/themes";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +33,9 @@ export default function RootLayout({
       >
         <Theme appearance="light" accentColor="violet">
           <Nav />
-          <main className="p-5">{children}</main>
+          <main className="p-5">
+            <Container>{children}</Container>
+          </main>
         </Theme>
       </body>
     </html>
