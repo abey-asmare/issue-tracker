@@ -1,7 +1,6 @@
 import { createIssueSchema, urlSchema } from "@/app/validations";
 import { prisma } from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-
 type Props = {
   params: Promise<{ id: string }>;
 };
