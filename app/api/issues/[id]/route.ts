@@ -1,10 +1,14 @@
 import { createIssueSchema, urlSchema } from "@/app/validations";
 import { prisma } from "@/prisma/client";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 type Props = {
   params: Promise<{ id: string }>;
 };
 export async function PATCH(request: NextRequest, { params }: Props) {
+  const session = await getServerSession();
+  if (!session) return NextResponse.json({}, { status: 401 });
+
   const { id } = await params;
   const validateURL = urlSchema.safeParse({ id });
   if (!validateURL.success)
@@ -30,8 +34,12 @@ export async function PATCH(request: NextRequest, { params }: Props) {
 }
 
 export async function DELETE(request: NextRequest, { params }: Props) {
+  const session = await getServerSession();
+  if (!session) return NextResponse.json({}, { status: 401 });
+
   const url = await params;
   const validateURL = urlSchema.safeParse(url);
+
   if (!validateURL.success)
     return NextResponse.json({ error: "Issue Not found" }, { status: 404 });
 
