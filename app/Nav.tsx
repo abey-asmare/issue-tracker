@@ -5,6 +5,7 @@ import {
   Container,
   DropdownMenu,
   Flex,
+  Skeleton,
   Text,
 } from "@radix-ui/themes";
 import clsx from "clsx";
@@ -58,7 +59,7 @@ function NavLink() {
 
 function AuthStatus() {
   const { status, data: session } = useSession();
-  if (status === "loading") return null;
+  if (status === "loading") return <Skeleton width='3rem' />;
   return (
     <Box>
       {status === "authenticated" ? (
