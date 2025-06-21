@@ -20,3 +20,9 @@ body {
 .radix-themes {
   --default-font-family: var(--font-geist-sans);
 }
+
+@layer utilities {
+  .nav-link {
+    @apply text-zinc-600  hover:text-zinc-800 transition-colors;
+  }
+}
