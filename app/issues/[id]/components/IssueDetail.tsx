@@ -1,6 +1,6 @@
 import { IssueBadge } from "@/app/components";
 import { Issue } from "@/app/generated/prisma";
-import { Heading, Flex, Card, Text } from "@radix-ui/themes";
+import { Card, Flex, Heading, Text } from "@radix-ui/themes";
 import ReactMarkdown from "react-markdown";
 
 function IssueDetails({ issue }: { issue: Issue }) {
@@ -17,5 +17,6 @@ function IssueDetails({ issue }: { issue: Issue }) {
     </>
   );
 }
+
 
 export default IssueDetails;
