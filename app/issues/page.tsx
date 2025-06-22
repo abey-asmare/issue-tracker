@@ -1,11 +1,23 @@
+import { IssueBadge, Link } from "@/app/components";
 import { prisma } from "@/prisma/client";
 import { Table } from "@radix-ui/themes";
 import clsx from "clsx";
+import { Status } from "../generated/prisma";
 import IssueAction from "./_components/IssueAction";
-import { Link, IssueBadge } from "@/app/components";
 
-async function IssuePage() {
-  const issues = await prisma.issue.findMany();
+type Props = {
+  searchParams: Promise<{ status: Status }>;
+};
+
+async function IssuePage({ searchParams }: Props) {
+  const sp = await searchParams;
+  const status = Object.values(Status).includes(sp.status)
+    ? sp.status
+    : undefined;
+
+  const issues = await prisma.issue.findMany({
+    where: { status },
+  });
   const headings = [
     { label: "Issue", classname: "" },
     { label: "Status", classname: "hidden md:table-cell" },
