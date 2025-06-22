@@ -3,35 +3,24 @@ import { Issue, User } from "@/app/generated/prisma";
 import { Select, Skeleton } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import Toast, { toast, Toaster } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 
 function AssigneeSelect({ issue }: { issue: Issue }) {
-  const {
-    data: users,
-    isLoading,
-    error,
-  } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: () => axios.get("/api/users").then((res) => res.data),
-    staleTime: 1000 * 60 * 60, // 1h
-    retry: 3,
-  });
+  const { data: users, isLoading, error } = useUsers();
+  const assignIssue = (userId: string) =>
+    axios
+      .patch("/api/issues/" + issue.id, {
+        assignedToUserId: userId !== "unassigned" ? userId : null,
+      })
+      .then(() => toast.success("change has been made successfully."))
+      .catch(() => toast.error("User can't be assigned, try again later."));
 
   if (isLoading) return <Skeleton />;
   if (error) return;
   return (
     <>
       <Select.Root
-        onValueChange={(userId) =>
-          axios
-            .patch("/api/issues/" + issue.id, {
-              assignedToUserId: userId !== "unassigned" ? userId : null,
-            })
-            .then(() => toast.success("change has been made successfully."))
-            .catch(() =>
-              toast.error("User can't be assigned, try again later.")
-            )
-        }
+        onValueChange={assignIssue}
         defaultValue={issue.assignedToUserId || ""}
       >
         <Select.Trigger placeholder="Assign ..." />
@@ -54,3 +43,11 @@ function AssigneeSelect({ issue }: { issue: Issue }) {
 }
 
 export default AssigneeSelect;
+function useUsers() {
+  return useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: () => axios.get("/api/users").then((res) => res.data),
+    staleTime: 1000 * 60 * 60, // 1h
+    retry: 3,
+  });
+}
