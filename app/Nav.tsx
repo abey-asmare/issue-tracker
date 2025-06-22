@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation";
 import { AiFillBug } from "react-icons/ai";
 function Nav() {
   return (
-    <nav className="border-b border-zinc-600 py-2 mb-4">
+    <nav className="border-b border-zinc-600 py-2 mb-4 px-3">
       <Container>
         <Flex justify="between" align="center" className="min-h-8">
           <Flex gap="3">

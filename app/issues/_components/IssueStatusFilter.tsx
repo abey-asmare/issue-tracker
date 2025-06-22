@@ -11,14 +11,19 @@ const statuses: { label: string; status?: Status }[] = [
 ];
 
 function IssueStatusFilter() {
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const orderBy = useSearchParams().get("orderBy");
 
   return (
     <Select.Root
+      defaultValue={searchParams.get("status") || ""}
       onValueChange={(value) => {
-        const query = value !== "ALL" ? `?status=${value}&` : "";
-        router.push("/issues" + query + (orderBy ? `orderBy=${orderBy}` : ""));
+        const status = value !== "ALL" ? value : "";
+        const orderBy = searchParams.get("orderBy");
+        const params = new URLSearchParams();
+        if (status) params.append("status", status);
+        if (orderBy) params.append("orderBy", orderBy);
+        router.push("/issues" + params.size ? "?" + params.toString() : "");
       }}
     >
       <Select.Trigger placeholder="Filter by status..." />
