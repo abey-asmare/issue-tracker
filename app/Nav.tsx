@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation";
 import { AiFillBug } from "react-icons/ai";
 function Nav() {
   return (
-    <nav className="border-b border-zinc-600 py-2 mb-4 px-3">
+    <nav className="border-b border-zinc-600 py-2 mb-4 px-3 sticky top-0 bg-white z-10">
       <Container>
         <Flex justify="between" align="center" className="min-h-8">
           <Flex gap="3">
@@ -59,7 +59,7 @@ function NavLink() {
 
 function AuthStatus() {
   const { status, data: session } = useSession();
-  if (status === "loading") return <Skeleton width='3rem' />;
+  if (status === "loading") return <Skeleton width="3rem" />;
   return (
     <Box>
       {status === "authenticated" ? (
