@@ -5,6 +5,17 @@ export const createIssueSchema = z.object({
   description: z.string().min(1),
 });
 
+export const patchIssueSchema = z.object({
+  title: z.string().min(1).max(255).optional(),
+  description: z.string().min(1).max(65535).optional(),
+  assignedToUserId: z
+    .string()
+    .min(1, { message: "assigned to user id is required" })
+    .max(255)
+    .optional()
+    .nullable(),
+});
+
 export const urlSchema = z.object({
   id: z.coerce.number().int(),
 });
