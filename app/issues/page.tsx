@@ -1,25 +1,17 @@
 import { IssueBadge } from "@/app/components";
 import { prisma } from "@/prisma/client";
+import { ArrowUpIcon } from "@radix-ui/react-icons";
 import { Flex, Table } from "@radix-ui/themes";
 import clsx from "clsx";
+import Link from "next/link";
 import { Issue, Status } from "../generated/prisma";
 import IssueAction from "./_components/IssueAction";
-import Link from "next/link";
-import { ArrowUpIcon } from "@radix-ui/react-icons";
 
 type Props = {
   searchParams: Promise<{ status: Status; orderBy: keyof Issue }>;
 };
 
 async function IssuePage({ searchParams: sp }: Props) {
-  const searchParams = await sp;
-  const status = Object.values(Status).includes(searchParams.status)
-    ? searchParams.status
-    : undefined;
-
-  const issues = await prisma.issue.findMany({
-    where: { status },
-  });
   const columns: { label: string; value: keyof Issue; classname?: string }[] = [
     { label: "Issue", value: "title", classname: "" },
     { label: "Status", value: "status", classname: "hidden md:table-cell" },
@@ -29,6 +21,21 @@ async function IssuePage({ searchParams: sp }: Props) {
       classname: "hidden md:table-cell",
     },
   ];
+
+  const searchParams = await sp;
+  const status = Object.values(Status).includes(searchParams.status)
+    ? searchParams.status
+    : undefined;
+  const orderBy = columns
+    .map((column) => column.value)
+    .includes(searchParams.orderBy)
+    ? { [searchParams.orderBy]: "asc" }
+    : undefined;
+
+  const issues = await prisma.issue.findMany({
+    where: { status },
+    orderBy,
+  });
   return (
     <div>
       <IssueAction />
@@ -42,13 +49,15 @@ async function IssuePage({ searchParams: sp }: Props) {
               >
                 <Flex>
                   <Link
-                  className="w-[10ch]"
+                    className="w-[10ch]"
                     href={{
                       query: { ...searchParams, orderBy: column.value },
                     }}
                   >
                     {column.label}
-                    {column.value === searchParams.orderBy && <ArrowUpIcon className="inline ml-1 "  />}
+                    {column.value === searchParams.orderBy && (
+                      <ArrowUpIcon className="inline ml-1 " />
+                    )}
                   </Link>
                 </Flex>
               </Table.ColumnHeaderCell>

@@ -17,8 +17,8 @@ function IssueStatusFilter() {
   return (
     <Select.Root
       onValueChange={(value) => {
-        const query = value !== "ALL" ? `?status=${value}` : "";
-        router.push("/issues" + query + (orderBy ? `&orderBy=${orderBy}` : ""));
+        const query = value !== "ALL" ? `?status=${value}&` : "";
+        router.push("/issues" + query + (orderBy ? `orderBy=${orderBy}` : ""));
       }}
     >
       <Select.Trigger placeholder="Filter by status..." />
