@@ -19,10 +19,10 @@ function IssueStatusFilter() {
       defaultValue={searchParams.get("status") || ""}
       onValueChange={(value) => {
         const status = value !== "ALL" ? value : "";
-        // const orderBy = searchParams.get("orderBy");
-        const params = new URLSearchParams(searchParams);
-        if (status) params.set("status", status);
-        // if (orderBy) params.append("orderBy", orderBy);
+        const orderBy = searchParams.get("orderBy");
+        const params = new URLSearchParams();
+        if (status) params.append("status", status);
+        if (orderBy) params.append("orderBy", orderBy);
         router.push("/issues" + params.size ? "?" + params.toString() : "");
       }}
     >
