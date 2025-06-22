@@ -1,27 +1,33 @@
-import { IssueBadge, Link } from "@/app/components";
+import { IssueBadge } from "@/app/components";
 import { prisma } from "@/prisma/client";
-import { Table } from "@radix-ui/themes";
+import { Flex, Table } from "@radix-ui/themes";
 import clsx from "clsx";
-import { Status } from "../generated/prisma";
+import { Issue, Status } from "../generated/prisma";
 import IssueAction from "./_components/IssueAction";
+import Link from "next/link";
+import { ArrowUpIcon } from "@radix-ui/react-icons";
 
 type Props = {
-  searchParams: Promise<{ status: Status }>;
+  searchParams: Promise<{ status: Status; orderBy: keyof Issue }>;
 };
 
-async function IssuePage({ searchParams }: Props) {
-  const sp = await searchParams;
-  const status = Object.values(Status).includes(sp.status)
-    ? sp.status
+async function IssuePage({ searchParams: sp }: Props) {
+  const searchParams = await sp;
+  const status = Object.values(Status).includes(searchParams.status)
+    ? searchParams.status
     : undefined;
 
   const issues = await prisma.issue.findMany({
     where: { status },
   });
-  const headings = [
-    { label: "Issue", classname: "" },
-    { label: "Status", classname: "hidden md:table-cell" },
-    { label: "CreatedAt", classname: "hidden md:table-cell" },
+  const columns: { label: string; value: keyof Issue; classname?: string }[] = [
+    { label: "Issue", value: "title", classname: "" },
+    { label: "Status", value: "status", classname: "hidden md:table-cell" },
+    {
+      label: "CreatedAt",
+      value: "createdAt",
+      classname: "hidden md:table-cell",
+    },
   ];
   return (
     <div>
@@ -29,12 +35,22 @@ async function IssuePage({ searchParams }: Props) {
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
-            {headings.map((heading) => (
+            {columns.map((column) => (
               <Table.ColumnHeaderCell
-                key={heading.label}
-                className={clsx("", heading.classname)}
+                key={column.label}
+                className={clsx("", column.classname)}
               >
-                {heading.label}
+                <Flex>
+                  <Link
+                  className="w-[10ch]"
+                    href={{
+                      query: { ...searchParams, orderBy: column.value },
+                    }}
+                  >
+                    {column.label}
+                    {column.value === searchParams.orderBy && <ArrowUpIcon className="inline ml-1 "  />}
+                  </Link>
+                </Flex>
               </Table.ColumnHeaderCell>
             ))}
           </Table.Row>
