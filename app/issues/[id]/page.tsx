@@ -11,8 +11,8 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-const fetchUser = cache((issueId: number) =>
-  prisma.issue.findUnique({ where: { id: parseInt(id) } })
+const fetchUser = cache((id: number) =>
+  prisma.issue.findUnique({ where: { id } })
 );
 async function IssueDetailPage({ params }: Props) {
   const { id } = await params;
