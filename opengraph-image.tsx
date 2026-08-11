@@ -12,7 +12,6 @@ export default async function Image({ params }: { params: { slug: string } }) {
   const issue = await prisma.issue.findFirst();
 
   return new ImageResponse(
-    (
       <div
         style={{
           fontSize: 128,
@@ -24,8 +23,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
           justifyContent: "center",
         }}
       >
-        {issue.title}
+        {issue?.title || "No issue found"}
       </div>
-    )
-  );
+  )
 }
