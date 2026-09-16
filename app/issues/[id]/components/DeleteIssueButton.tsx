@@ -63,7 +63,7 @@ function DeleteIssueButton({ issueId }: { issueId: number }) {
       await axios.delete(`/api/issues/${issueId}`);
       router.push("/issues");
       router.refresh();
-    } catch (error) {
+    } catch {
       setError(true);
     }
   }

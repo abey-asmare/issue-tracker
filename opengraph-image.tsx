@@ -8,22 +8,24 @@ export const size = {
 
 export const contentType = "image/png";
 
-export default async function Image({ params }: { params: { slug: string } }) {
+export const dynamic = "force-dynamic";
+
+export default async function Image() {
   const issue = await prisma.issue.findFirst();
 
   return new ImageResponse(
-      <div
-        style={{
-          fontSize: 128,
-          background: "white",
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {issue?.title || "No issue found"}
-      </div>
-  )
+    <div
+      style={{
+        fontSize: 128,
+        background: "white",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {issue?.title || "No issue found"}
+    </div>
+  );
 }
